@@ -1,5 +1,9 @@
 # More than a Hack 2027 — Phase 1: Ball Possession
 
+**This team's implementation:** [SOLUTION.md](SOLUTION.md) has the local run command, and
+[TEAM.md](TEAM.md) describes the deterministic possession method. Replace `TEAM` with the
+registered team name before submitting.
+
 **Organised by [Metrica Sports](https://metrica-sports.com), [FC Barcelona](https://www.fcbarcelona.com)
 and the [Mobile World Capital Barcelona](https://www.mwcbarcelona.com)**, at the Talent Arena in Barcelona.
 

@@ -1,0 +1,18 @@
+{
+  "pitch_length_m": 105.3,
+  "pitch_width_m": 68.0,
+  "max_interpolation_gap_frames": 10,
+  "control_distance_m": 2.0,
+  "control_margin_m": 1.0,
+  "turnover_window_frames": 12,
+  "turnover_support_frames": 8,
+  "tag_change_frames": 25,
+  "outside_margin_m": 0.5,
+  "outside_confirm_frames": 5,
+  "stationary_radius_m": 0.5,
+  "stationary_confirm_frames": 50,
+  "set_piece_missing_confirm_frames": 50,
+  "restart_speed_mps": 1.0,
+  "restart_motion_confirm_frames": 5,
+  "live_tag_confirm_frames": 25
+}
