@@ -1,5 +1,9 @@
 # More than a Hack 2027 — Phase 1: Ball Possession
 
+**Rules update:** the organisers' [clarification supplied on November 7](RULES_CLARIFICATION.md)
+takes precedence over conflicting guidance below. In particular, do not check predictions against
+the video; use external data for all training and parameter tuning.
+
 **This team's implementation:** [SOLUTION.md](SOLUTION.md) has the local run command, and
 [TEAM.md](TEAM.md) describes the deterministic possession method. Replace `TEAM` with the
 registered team name before submitting.

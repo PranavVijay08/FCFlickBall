@@ -4,7 +4,7 @@ This is a local, CPU-only implementation of the Initial Challenge. It predicts t
 
 ## Before you run it
 
-Read `RULES.md`, `DATA.md`, `EVALUATION.md`, `SUBMISSION.md`, and your signed data-use terms. Keep the downloaded match assets local. Do not commit match data, frame-level exports, diagnostic transition logs, or generated submissions to a public repository. Do not send competition assets or extracts to hosted LLMs.
+Read `RULES_CLARIFICATION.md` first: the organisers' email takes precedence over conflicting older instructions. Also read `RULES.md`, `DATA.md`, `EVALUATION.md`, `SUBMISSION.md`, and your signed data-use terms. Keep downloaded match assets local. Do not check predictions or transition logs against the video. Do not send provided data or extracts to AI services. Intermediate files may be provided through the organisers' authorised channel; keep them out of public Git unless their redistribution is explicitly permitted.
 
 Use CPython 3.11.9 and install the exact versions in `requirements-submission.txt`:
 
@@ -39,7 +39,7 @@ To regenerate the provided references in a local ignored directory:
 python starter\baseline.py --out artifacts\baselines
 ```
 
-The official public five-minute scorer is available for final pipeline checking. It cannot be used to choose configuration values, train a model, or claim full-match performance.
+Use the format validator, synthetic tests, input-integrity checks, and byte-for-byte reproduction checks. Do not train, tune, fit, calibrate, or select a version using this match. The candidate was scored once on the public five-minute labels before the clarification, after its settings were fixed; no settings changed because of that result. Our updated workflow avoids further possession-score comparisons on this match unless organisers confirm their diagnostic use. Any future tuning must use licensed external data.
 
 ## What the program does
 
@@ -50,7 +50,7 @@ The official public five-minute scorer is available for final pipeline checking.
 5. Processes each half separately. A brief opposing touch leaves possession unchanged; sustained geometric evidence, or a sustained unopposed phase tag during a tracking gap, changes it. Positive outside-pitch or set-piece evidence marks a stoppage. Renewed motion or sustained live-phase evidence marks a restart.
 6. Emits exactly one of `H`, `A`, `D`, or `X` for each tactical frame and applies the official format validator.
 
-The fixed thresholds are in `configs/default.json`. They are implementation assumptions, not values selected against the public ground truth. See `TEAM.md` for limits and competition compliance.
+The fixed thresholds are in `configs/default.json`. They are initial implementation assumptions, not externally tuned or proven optimal values. See `PARAMETER_PROVENANCE.md` for their origin and the external-data-only policy for future changes. The program has no training step. Its local transition log explains automatic decisions; do not compare it against the provided video.
 
 ## Release checklist
 

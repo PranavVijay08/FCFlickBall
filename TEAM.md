@@ -2,6 +2,8 @@
 
 Replace `TEAM` with the registered team name before submission.
 
+The organisers' email recorded in `RULES_CLARIFICATION.md` supersedes conflicting earlier instructions. All future training and tuning must use external data, and predictions must not be checked against the provided video.
+
 ## Task and approach
 
 The system emits `H` for home possession, `A` for away possession, `D` for a dead ball, and `X` when ownership is unresolved. It writes one row for every frame of the tactical recording. A possession is a continuous live interval owned by one team. A stoppage separates possessions even when the same team restarts.
@@ -12,7 +14,7 @@ The method is deterministic and runs locally on a CPU. It reads the supplied aut
 
 **Used:** tactical ATD metadata and raw tracking, plus tactical Smart Tagging. The metadata maps each track slot to a team. A slot is not treated as a player identity. The raw file is checked record by record: ATD `frame_id` 1 maps to tactical frame 0. Tag intervals are rounded from seconds at 25 frames per second. Normalised coordinates become metres using a 105.3 × 68 m pitch.
 
-**Not used for inference:** tactical video, tactical homography, broadcast video and tracking, or external match data. Video and homography can be used locally to debug alignment. The broadcast recording has its own timeline and was excluded to keep the method reproducible within the project schedule.
+**Not used for inference:** tactical video, tactical homography, broadcast video and tracking, or external match data. Input alignment is checked automatically from frame identifiers and published metadata. Predictions are not checked against the video. The broadcast recording has its own timeline and was excluded to keep the method reproducible within the project schedule.
 
 The halves are processed separately. The published kickoff frame for each half starts its play-state inference. Frames before the second kickoff inside the graded second-half interval receive `D`. Frames before the first graded half, between halves, and after the match receive `X`.
 
@@ -36,9 +38,9 @@ All values are fixed in `configs/default.json`. They are reasoned starting assum
 
 ## Training and validation data
 
-There is **no training data** and no human-labelled dataset. Synthetic sequences with invented answers test passes, deflections, turnovers, stoppages, restarts, missing observations, tags, track slots, and half boundaries. The supplied public ground truth may be used only for final alignment and label-meaning checks. It is not a training or tuning set and cannot establish full-match performance.
+There is **no training data** and no human-labelled dataset. Synthetic sequences with invented answers test the implementation of passes, deflections, turnovers, stoppages, restarts, missing observations, tags, frame order, and half boundaries. They are unrelated to specific competition-game frames. Automatic input-integrity, output-format, and reproducibility checks do not use possession answers or compare output with video.
 
-The inference module neither reads nor imports a ground-truth file. The public five-minute score and the private competition score are distinct. The published `spellF1 = 0.2433` baseline is a target to beat, not a measurement of this method.
+The inference module neither reads nor imports a ground-truth file. Before the clarification, the frozen candidate was scored once on the public five-minute labels as a pipeline check; no configuration changes were made in response. The updated workflow avoids further possession-score comparisons on this match unless organisers confirm their diagnostic use. Future training, fitting, calibration, tuning, or variant selection requires licensed external data; this also excludes training on this game's automatic pseudo-labels. See `PARAMETER_PROVENANCE.md`.
 
 ## Limitations
 
