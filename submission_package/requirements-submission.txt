@@ -1,0 +1,3 @@
+# Tested on CPython 3.11.9. Exact versions support byte-for-byte reproduction.
+numpy==2.2.5
+pandas==2.2.3

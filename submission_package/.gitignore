@@ -1,0 +1,24 @@
+# Keep this file when copying the package into a fresh public repository.
+data/
+external_data/
+artifacts/
+evaluation/results/
+evaluation/reports/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.mp4
+*.mov
+*.mkv
+*.run.json
+*_transitions_local.csv
+*_features_local.npz
+*.log
+.env
+.env.*
+!.env.example
+*.pdf
+
+# If ML is adopted, intentionally publish only reviewed model artifacts under models/.
+# Do not blanket-ignore model weights required to reproduce the submission.
