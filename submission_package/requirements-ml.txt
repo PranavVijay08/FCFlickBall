@@ -1,0 +1,10 @@
+# Frozen ML inference dependencies. No external training data is required for prediction.
+-r requirements-submission.txt
+scikit-learn==1.6.1
+scipy==1.15.2
+joblib==1.5.0
+threadpoolctl==3.6.0
+# Pin pandas transitive runtime dependencies to the isolated tested environment.
+python-dateutil==4.0.0
+pytz==2026.6
+tzdata==2026.6

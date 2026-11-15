@@ -1,0 +1,36 @@
+{
+  "model_sha256": "493eed8a1d3287fea0b3d58468a39b9ed9acc75ceaa4af563dbd407a9408c8ae",
+  "algorithm": "HistGradientBoostingClassifier + trained transitions + Viterbi sequence decoding",
+  "schema": "team_geometry_context_v1",
+  "features": 105,
+  "training_samples": 453832,
+  "python": "3.11.9",
+  "training_packages": {
+    "numpy": "2.2.5",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.6.1",
+    "scipy": "1.15.2",
+    "joblib": "1.5.0",
+    "threadpoolctl": "3.6.0"
+  },
+  "data_manifest": "training/idsse_manifest.json",
+  "validation_report": "reports/external_validation.json",
+  "holdout_report": "reports/external_holdout.json",
+  "frozen_before_competition_inference": true,
+  "training_source_sha256": {
+    "training/download_idsse.py": "f7f7dd740c4d83f15f1206c1c6213b7bf182bad84b1869da27ee9c01371fb633",
+    "training/idsse.py": "e1f3ab4b96201f723c96047738058cf8350207bc11d96bdd824f675c40a74fcd",
+    "training/train.py": "bef1488358c31fd2c7b805d684d015c9a7a42c0079727b9ede71cea39a72da0c",
+    "training/__init__.py": "e2d4874f57f76dd9f45bb7b609ada9d6d79019ce5563d2bf1ce255043c00d197",
+    "possession/cli.py": "b5b3c5898c0f4b5b7cb291fcad493edb56453196a6e2c4b337e3b01acc913235",
+    "possession/config.py": "20085c8207bc51a4e8e14fda46fda23c71fc82c9dd0f0600bb1a58e0fe6083b6",
+    "possession/decoder.py": "5227f5efde5cf730cfa332389aed04fde76bee5ab80b97f1758cbb30fb52c306",
+    "possession/features.py": "9749f441bf7017b918acf127019de2396f5f973d8623de37f0168e0116d178c0",
+    "possession/ml_cli.py": "9a1c475443dbd00e48c2176da0776a3f32f867759323216595306688ece89aad",
+    "possession/ml_features.py": "19d13a152aa8e3a8d302124b8031a4370bc8a3c5a42598d883831a43ebf3fdf4",
+    "possession/ml_model.py": "a7fc637c016fcdbd3695c0ab97588625c23a5fcd477f318f827a77b2a373ab82",
+    "possession/submit.py": "65a4b0bde3cc5a3a9b2a3d450fee14c0ce0afaccce4ee3879ea900a903e19cb8",
+    "possession/tactical.py": "10900f0082acc875f1de7fa2db1264065049436df2e6ed41a11831e8e1fb1c6b",
+    "possession/__init__.py": "d344f45aef08c2a6bbd61ae4241eee4776734370d5bb227a2ae27ea350128e4e"
+  }
+}

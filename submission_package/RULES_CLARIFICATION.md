@@ -37,8 +37,10 @@ Originally recorded on November 7, 2026 from the organisers' email supplied by t
 - Intermediate outputs can be provided as permitted by the clarification. Use the organisers' authorised submission channel; this permission does not by itself grant unrestricted public redistribution of the licensed match data.
 - Keep the format validator separate from possession scoring. Do not use the public five-minute score for tuning or model selection. Our conservative workflow is to stop further possession-score comparisons on this match unless organisers confirm their diagnostic use under the clarification.
 
-## Existing work
+## Historical fallback work
 
-The prediction pipeline has no training step and does not read the provided video or ground-truth labels. Its thresholds were fixed before scoring the candidate on the public five-minute labels. That historical check is recorded, not removed; it did not cause parameter changes. Video metadata was checked automatically, but predictions were not compared against video.
+The historical fallback pipeline has no training step and does not read the provided video or ground-truth labels. Its thresholds were fixed before scoring that earlier candidate on the public five-minute labels. That historical check is recorded, not removed; it did not cause parameter changes. Video metadata was checked automatically, but predictions were not compared against video.
+
+On November 14 the selected solution was extended with a model trained and selected exclusively on licensed external IDSSE matches. Its frozen competition inference uses supplied tracking only; it does not read competition video or labels. TEAM.md, PARAMETER_PROVENANCE.md and the external reports describe the completed method.
 
 The program and configuration are not changed by this clarification update. Documentation that previously suggested video-based output checks or training on this game's pseudo-labels is superseded. This record explains the development process; it is not an organiser's certification of the entry.

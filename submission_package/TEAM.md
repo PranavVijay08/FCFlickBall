@@ -1,58 +1,69 @@
-# TEAM: Technical document for Phase 1 possession inference
+﻿# TEAM: External-data temporal possession model
 
-Replace `TEAM` with the registered team name before submission. This document describes the packaged fallback. If the ML candidate is selected, rewrite it to describe that actual submitted method and its external training data.
+Replace TEAM with the registered team name before uploading this Markdown technical document. This document describes the selected trained method.
 
-The organisers' email recorded in `RULES_CLARIFICATION.md` supersedes conflicting earlier instructions. All future training and tuning must use external data, and predictions must not be checked against the provided video.
+## Approach and assets
 
-## Task and approach
+We emit H for home live possession, A for away live possession, D for stopped play, and X outside the graded periods or for wholly unobservable halves. The input is the supplied automatic tactical tracking; we use it instead of rebuilding video detection. Raw video, broadcast assets, homography and Smart Tagging are not inputs to the selected learned model. The earlier untrained tag-assisted method remains available as a fallback.
 
-The system emits `H` for home possession, `A` for away possession, `D` for a dead ball, and `X` when ownership is unresolved. It writes one row for every frame of the tactical recording. A possession is a continuous live interval owned by one team. A stoppage separates possessions even when the same team restarts.
+A scikit-learn HistGradientBoostingClassifier estimates H/A/D probabilities. Explicit past/future context and a whole-half sequence decoder allow subsequent observations to resolve an earlier ambiguous touch. All fitting and model selection use external matches. Competition inference loads frozen weights and never trains.
 
-The method is deterministic and runs locally on a CPU. It reads the supplied automatic tactical tracking and Smart Tagging, extracts team-level evidence, then applies a small temporal state machine. The state machine remembers the previous owner through a loose ball or short loss of tracking. It changes owner only when opposing control persists. This is designed to limit false possession splits, which the competition's `spellF1` penalises. There is no learned model, human-made label, or manually corrected competition frame in the pipeline.
+## External data and rights
 
-## Inputs and alignment
+IDSSE version 1 is attributed to Manuel Bassek, Robert Rein, Hendrik Weber and Daniel Memmert (2025), An integrated dataset of spatiotemporal and event data in elite soccer, Scientific Data 12, 195. Paper: https://doi.org/10.1038/s41597-025-04505-y. Dataset: https://doi.org/10.6084/m9.figshare.28196177.v1. The authors document DFL permission and CC BY 4.0 licensing. THIRD_PARTY_NOTICES.md and training/idsse_manifest.json record attribution, transformations, file IDs and verified checksums.
 
-**Used:** tactical ATD metadata and raw tracking, plus tactical Smart Tagging. The metadata maps each track slot to a team. A slot is not treated as a player identity. The raw file is checked record by record: ATD `frame_id` 1 maps to tactical frame 0. Tag intervals are rounded from seconds at 25 frames per second. Normalised coordinates become metres using a 105.3 × 68 m pitch.
+We use the provider's BallStatus/BallPossession as external targets: inactive -> D; active and possession 1 -> H; active and possession 2 -> A. Unknown labels are excluded. The team created no manual annotations. These are external provider annotations, not information about the competition match.
 
-**Not used for inference:** tactical video, tactical homography, broadcast video and tracking, or external match data. Input alignment is checked automatically from frame identifiers and published metadata. Predictions are not checked against the video. The broadcast recording has its own timeline and was excluded to keep the method reproducible within the project schedule.
+Training matches: J03WMX, J03WN1, J03WOH, J03WOY. Validation: J03WPY, J03WQQ. Held-out report: J03WR9. Both halves remain in the same split. There is no shuffled-frame train/test split. The held-out match was evaluated once after selection, with no subsequent model or configuration changes.
 
-The halves are processed separately. The published kickoff frame for each half starts its play-state inference. Frames before the second kickoff inside the graded second-half interval receive `D`. Frames before the first graded half, between halves, and after the match receive `X`.
+## Alignment and features
 
-## Evidence and missing data
+DFL object records are aligned by frame number within each half. Centred metre coordinates are translated using the actual pitch dimensions. Participant ATD frame 1 becomes submission frame 0; normalised positions are converted using 105.3 x 68 metres. Historical corrected-tracking offsets are not applied. Track slots are used for team membership rather than permanent player identity.
 
-For each observed ball position, the method finds the nearest tracked player from each team in pitch metres. A team supplies strong control evidence when its nearest player is within 2 m of the ball and at least 1 m closer than the opponent's nearest player. The method uses team membership only, so track fragmentation and slot swaps do not create a false player history.
+The 105 features include nearest three player-to-ball distances per team; nearest-team distance difference; observed player counts; ball observation flag; ball speed and speed change computed at 25 Hz; relative ball coordinates and signed boundary distance; time since/until an observed ball; and one-/three-second past/future samples and rolling summaries. Missing values remain NaN with observation/coverage information. Context never crosses halves. BallStatus, possession, event fields, identities, match minute and ball height are excluded from predictor inputs.
 
-Missing ball locations remain marked as missing. Gaps up to ten frames are linearly interpolated inside a half, but these estimated locations cannot establish a turnover, stoppage, or restart. A missing ball alone does not mean that play has stopped.
+## Training and decoding
 
-Automatic attacking phase tags supply a clue for the tagged team; defensive phase tags support its opponent. Overlapping contradictory clues cancel. Multiple agreeing tags still produce only one team clue. Set-piece tags support stoppage and restart decisions but their boundaries are not copied into the output as possession boundaries. Unassigned team tags, such as `N/A`, give no team clue.
+Fixed classifier settings: learning_rate=0.1, max_iter=100, max_leaf_nodes=15, min_samples_leaf=20, l2_regularization=1, early_stopping=False, random_state=2026. These are initial engineering choices, not an exhaustive parameter search. Every fifth valid training frame is sampled after full-resolution features are computed. Training includes 453,832 samples after augmentation.
 
-## Possession and stoppage rules
+Augmentation uses a fixed-seed external copy with missing ball observations in 0.2-3-second bursts covering approximately 30% of each half, plus home/away swapping with corresponding target swapping. All dependent features are recomputed after masking. The mask is independent of labels and competition output.
 
-The state stores whether play is live, dead, or unresolved, and the current owner if live. An isolated opposing touch does not switch possession. A turnover needs strong opponent evidence in at least 8 of 12 frames; its boundary is placed at the first supporting frame in that confirmation window. Where the ball or both teams' positions are unavailable, a single unambiguous opposing phase clue must persist for one second without contradictory strong geometry.
+A 3x3 transition table is estimated from consecutive valid training labels with add-one smoothing, including swapped counts. Viterbi-style decoding maximises sum(log frame probabilities) plus lambda times sum(log transition probabilities). This is a discriminative sequence score. Only lambda values 0, 0.25, 1 and 2 were tested on validation; 2 was selected. There is no fixed minimum possession duration or transition list tied to competition frames.
 
-The ball is marked dead after five consecutive observed positions more than 0.5 m outside the pitch. A set-piece tag and an observed ball remaining within a 0.5 m area for two seconds also establish a stoppage. The same tag and two seconds without an observed ball supply weaker stoppage evidence when geometry is unavailable. Confirmation moves the boundary to the start of the supporting interval.
+## Possession interpretation
 
-After a stoppage, the system waits for five consecutive observed, on-pitch frames moving faster than 1 m/s, or for one second of unambiguous live-phase evidence outside a set-piece interval. The restart owner comes from consistent observed control in that interval, or from a single unambiguous phase clue. Otherwise the frame is `X` until ownership becomes clear. State is reset at halftime.
+The intended behaviour is continuous ownership through passes and loose balls until the opponent gains control. A slight interception without subsequent control should not change ownership. Learned temporal features and decoding can support these distinctions but do not guarantee them. Future context helps interpret the transition; it does not justify moving a turnover back to the original misplaced pass.
 
-All values are fixed in `configs/default.json`. They are reasoned starting assumptions, not parameters fitted to the competition match or selected against the public five-minute labels.
+D is a learned separate state and separates possessions even when the same team restarts. Missing ball observations alone do not force D. We do not use an uncalibrated confidence threshold to manufacture X within otherwise observed halves. Halves reset independently. Outside published graded blocks output is X; the publicly documented second-half pre-kickoff interval is D until frame 113742.
 
-## Training and validation data
+## External evaluation and selection
 
-There is **no training data** and no human-labelled dataset. Synthetic sequences with invented answers test the implementation of passes, deflections, turnovers, stoppages, restarts, missing observations, tags, frame order, and half boundaries. They are unrelated to specific competition-game frames. Automatic input-integrity, output-format, and reproducibility checks do not use possession answers or compare output with video.
+The official metric functions are applied separately to full-resolution external halves, then averaged within matches and equally across matches. The reference is the nearest-player baseline with +/-50-frame majority smoothing, evaluated on identical inputs.
 
-The inference module neither reads nor imports a ground-truth file. Before the clarification, the frozen candidate was scored once on the public five-minute labels as a pipeline check; no configuration changes were made in response. The updated workflow avoids further possession-score comparisons on this match unless organisers confirm their diagnostic use. Future training, fitting, calibration, tuning, or variant selection requires licensed external data; this also excludes training on this game's automatic pseudo-labels. See `PARAMETER_PROVENANCE.md`.
+| Split / condition | ML spellF1 | ML macroF1 | Baseline spellF1 | Baseline macroF1 |
+|---|---:|---:|---:|---:|
+| Validation clean | 0.6300 | 0.9306 | 0.3402 | 0.4052 |
+| Validation masked | 0.5766 | 0.9112 | 0.2797 | 0.3997 |
+| Held-out clean | 0.6304 | 0.9365 | 0.3143 | 0.4104 |
+| Held-out masked | 0.5740 | 0.9239 | 0.2793 | 0.4129 |
 
-## Limitations
+Adoption required better spellF1 and no lower macroF1 on both clean and masked validation. Qualifying settings were ranked by masked spellF1, then masked macroF1, then smaller lambda. Full reports are in reports/. The clean baseline rarely predicts D, explaining part of its macroF1 weakness.
 
-The tracking misses the ball on many graded frames. Long gaps can hide a genuine turnover or restart, and automatic tags can be wrong or absent. A ball outside the pitch is not always easy to identify from noisy coordinates. A stationary ball during a set piece does not by itself identify the exact whistle frame. The fixed rules can therefore miss short possessions or place boundaries late or early. There is no permitted full-match answer set for this competition game available to us for choosing improved settings. Licensed external matches can support future training and validation, but the packaged fallback has not been externally tuned.
+These scores are not competition scores and do not establish superiority over the earlier tag-assisted fallback. Provider semantics and input quality differ. The ML attempt did not score competition ground truth or use it for selection. The earlier fallback's historical public check is retained in EXPERIMENT_LOG.md; it did not guide this model.
 
-## Reproduce the CSV
+## Rules and limitations
 
-Use CPython 3.11.9, install `requirements-submission.txt`, place the authorised match bundle under `data/`, and run:
+We follow the 3 November clarification: external-only training, fitting and tuning; no labels, tracking repair, prediction edits or pseudo-label training on the supplied game; no comparison of output against its video; no uploading participant assets or extracts to AI services. Prediction imports neither external training data nor any ground-truth file. Automatic local checks verify software and file integrity.
+
+Limitations include seven external matches, a single reporting holdout, provider-specific control definitions and the difference between clean DFL tracking and noisy participant data. Masking does not simulate every tracking error, aerial ball or long correlated gap. Geometry cannot always establish whistle timing; temporal decoding can suppress short real possessions. Arbitrary MP4 input requires a separate tracking system and is outside this submission.
+
+## Reproduction
+
+Use Python 3.11.9, install requirements-ml.txt, and run from the package root:
 
 ```powershell
-python -m possession.cli --data-dir .\data --config configs\default.json --output evaluation\results\TEAM.csv
-python evaluation\validate_submission.py evaluation\results\TEAM.csv
+python -m possession.submit --data-dir <participant-data-folder> --output artifacts/TEAM.csv
+python evaluation/validate_submission.py artifacts/TEAM.csv
 ```
 
-The command writes a local manifest with the exact input, configuration, and output hashes. Re-run with the same inputs and compare the output hash. `README.md` contains setup instructions; `TWO_DAY_PLAN.md` contains submission checks. Replace the data path with an absolute participant-data path when necessary. The public repository must exclude the match assets, generated predictions, and frame-level diagnostics.
+The bundled frozen model is models/idsse_hgb.joblib; configs/selected.json pins its hash. No training-data download or retraining is required for submission reproduction. Expected CSV SHA-256: abda45972282c7d39a2e73d46ad4764c263b098701389e83ec0656d5c89e92c3. README.md includes installation, tests, external training and fallback commands. Keep participant assets, environments, caches and generated predictions out of public commits.

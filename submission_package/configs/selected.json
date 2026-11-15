@@ -1,0 +1,7 @@
+{
+  "method": "ml",
+  "model": "models/idsse_hgb.joblib",
+  "model_sha256": "493eed8a1d3287fea0b3d58468a39b9ed9acc75ceaa4af563dbd407a9408c8ae",
+  "decoder_lambda": 2.0,
+  "selection_basis": "External validation only; four fixed decoder strengths; clean and masked adoption gate"
+}

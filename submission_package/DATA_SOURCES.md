@@ -1,6 +1,6 @@
 # External training source research - 14 November 2026
 
-These findings are recommendations, not claims that every source has been downloaded or used. No external training data has been used by the packaged fallback.
+Research findings below distinguish candidate sources. Update on 14 November: IDSSE version 1 has now been downloaded, checksum-verified, parsed and used for the selected external-only model. The verified retrieval record is training/idsse_manifest.json. Other sources in the table were not used. The retained historical fallback still has no training data.
 
 | Source | Evidence and rights | Fit for this sprint |
 |---|---|---|

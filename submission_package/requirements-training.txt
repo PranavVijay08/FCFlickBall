@@ -1,0 +1,2 @@
+# External training and frozen ML inference, tested on Python 3.11.9.
+-r requirements-ml.txt

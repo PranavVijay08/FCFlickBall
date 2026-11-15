@@ -1,5 +1,15 @@
 # Experiment and decision log
 
+## 14 November: external-only ML implementation
+
+Implemented shared observation features, a strict external XML adapter, a histogram gradient-boosted classifier, fixed missing-ball/team-swap augmentation and three-state sequence decoding. Downloaded/verified all seven licensed IDSSE matches; training/validation/reporting match splits were fixed in advance. All 17 tests passed, including the original 10 fallback tests and seven ML/adapter tests, in both the existing and newly isolated environments.
+
+The four decoder strengths were evaluated only on external validation data. Strength 2 passed the predeclared adoption gate; validation spellF1/macroF1 were 0.6300/0.9306 clean and 0.5766/0.9112 masked. The reserved external match was evaluated once after selection: 0.6304/0.9365 clean and 0.5740/0.9239 masked. Model/configuration remained frozen afterward. These scores are not estimates of private competition performance.
+
+Local competition inference generated a format-valid full-match CSV. A newly isolated environment regenerated identical bytes. No competition GT was scored for this ML attempt, no output was compared with video, and no model parameters were changed after examining competition output. Repository publication and final submission remain with the user.
+
+## Earlier fallback record
+
 Only record general design reasons, synthetic test results, and reproducibility checks here. Do not add match-specific answer labels, tracking extracts, or transition corrections.
 
 | Decision | Reason | Evidence |

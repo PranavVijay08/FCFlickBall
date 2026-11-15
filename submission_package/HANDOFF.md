@@ -1,8 +1,14 @@
 # Team handoffs: Pranav, Jilla, Ashwin and Sriva
 
+## Implementation update: 14 November 2026
+
+At the user's request, the agent completed the local external-data ML implementation, trained it, applied the external validation gate, evaluated the reserved external match once and generated the final local competition CSV. README.md now gives the selected-method reproduction command; TEAM.md describes the actual trained method. The original role assignments below are retained as planning history, not outstanding implementation claims.
+
+The user explicitly retains commits, pushes, public repository publication, team naming, form access and final submission. Those actions have not been performed by the agent. See PACKAGING_AUDIT.md for checks and limits.
+
 Working template only: assignments and checkpoints below are planned, not reports of completed ML work. Each owner updates their row at the end of a work block. Record UTC timestamps with dates, since Australia and the USA may be on different calendar days.
 
-## Ownership
+## Historical ownership and initial status before agent implementation
 
 | Owner | Responsibility | Current starting point | Next deliverable |
 |---|---|---|---|

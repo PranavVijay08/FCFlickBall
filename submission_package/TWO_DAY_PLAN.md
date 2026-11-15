@@ -1,5 +1,7 @@
 # Two-day completion plan: 14-15 November 2026 local weekends
 
+Implementation status, 14 November: the user subsequently authorised the agent to perform the local technical work. The external-data ML candidate has now been implemented, trained, selected on external validation, evaluated once on the reserved external match and used for local frozen inference. README.md, TEAM.md and reports/ describe the actual outcome. Team assignments below remain the original coordination plan. Commits, pushes, publication, team naming and form submission are explicitly reserved for the user.
+
 ## Decision and success criteria
 
 The four members are Pranav (Brisbane), Jilla (Sydney), Ashwin (USA) and Sriva (USA). Budget seven hours each: **28 person-hours guaranteed**, with up to **40 person-hours** if everyone can contribute ten. The extra twelve hours are contingency, not required work or justification for adding a video pipeline. Use each person's local 14-15 November weekend. Final release during Sunday in the USA falls on Monday 16 November in Australia; no Monday work from Pranav or Jilla is assumed. Target final submission by Monday 16 November, 12:00 Brisbane / 13:00 Sydney, with a ready fallback before the Australian team goes offline on Sunday. The documented deadline is 17 November, but its time and timezone must be checked in official communications.
