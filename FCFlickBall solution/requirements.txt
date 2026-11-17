@@ -1,0 +1,10 @@
+# Tested with CPython 3.11.9. Frozen inference and optional external training.
+numpy==2.2.5
+pandas==2.2.3
+scikit-learn==1.6.1
+scipy==1.15.2
+joblib==1.5.0
+threadpoolctl==3.6.0
+python-dateutil==4.0.0
+pytz==2026.6
+tzdata==2026.6

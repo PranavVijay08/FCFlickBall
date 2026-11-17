@@ -1,0 +1,31 @@
+# Required uploads stay local; publish source, model and documentation only.
+/submission_files/
+/artifacts/
+/data/
+/external_data/
+/.venv/
+/venv/
+/env/
+__pycache__/
+*.py[cod]
+*.run.json
+*.csv
+*.xml
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.npz
+*.npy
+*.pkl
+*.gzip
+*.pl3container
+*.pdf
+*.zip
+*.log
+.env
+.env.*
+.DS_Store
+.idea/
+.vscode/
+# The externally trained model is required and intentionally publishable.
