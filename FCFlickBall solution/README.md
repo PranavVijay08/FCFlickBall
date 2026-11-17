@@ -2,21 +2,9 @@
 
 This folder is a self-contained submission repository. The frozen model reads the supplied **tactical tracking**, then generates one `H`, `A`, `D` or `X` label for each of the 199,319 tactical-video frames. It does not read an MP4 or train on the competition match.
 
-## Files to publish and upload
+The approach, external training data, possession interpretation, evaluation and limitations are described in [FCFlickBall.md](FCFlickBall.md).
 
-| Item | Purpose |
-|---|---|
-| `possession/`, `games.py`, `configs/`, `models/` | Prediction code, public match constants, frozen settings and trained model |
-| `requirements.txt` | Exact tested dependency versions |
-| `evaluation/`, `tests/` | Official format validator and metrics; artificial software tests |
-| `training/`, `reports/` | External training reproduction, provenance and external evaluation results |
-| `FCFlickBall.md` | Short technical document for the submission form and repository |
-| `LICENSE`, `CITATION.cff`, `THIRD_PARTY_NOTICES.md` | Upstream licence and attribution |
-| `submission_files/FCFlickBall.csv` | Final prediction file: upload to the organisers, **do not commit** |
-
-Copy this entire folder to your new repository, including `.gitignore`. The `submission_files/` directory is intentionally ignored. Normal Git staging includes the source, model and technical document but excludes the predictions and local run manifest. Do not force-add ignored files. Do not publish this whole folder as an unfiltered archive: it contains the private upload CSV.
-
-The participant data, external raw datasets, ground truth, videos, personal correspondence and Python environment are not included. Keep the authorised data bundle outside this repository. No dependency on the original parent workspace or `submission_package/` remains.
+Competition assets and prediction files are not distributed in this repository. Authorised participants can generate the submission using the instructions below.
 
 ## Install and reproduce
 
@@ -56,7 +44,7 @@ Expected model SHA-256:
 493eed8a1d3287fea0b3d58468a39b9ed9acc75ceaa4af563dbd407a9408c8ae
 ```
 
-The hash proves identical bytes, not prediction accuracy. The official validator checks the header, row count, frame sequence and allowed labels without reading ground truth. Its inherited suggestion to score the public labels is not part of this workflow. Do not use competition scores or video to select settings or inspect prediction errors.
+The hash proves identical bytes, not prediction accuracy. The official validator checks the header, row count, frame sequence and allowed labels without reading ground truth. Only format validation is used in this workflow. Competition scores and video are not used to select settings or inspect prediction errors.
 
 ## Inspecting the implementation
 
@@ -78,13 +66,3 @@ This is unnecessary for regenerating the final CSV. The bundled model is the sub
 ```
 
 Only licensed external IDSSE matches may enter this procedure. The commands save new artifacts separately; they do not replace the frozen submission model. Published validation and held-out reports are in `reports/`. The held-out match was used once for reporting after selection, not as a tuning loop. Retraining is not required to produce byte-identical submission predictions.
-
-## Final submission steps
-
-1. Use the registered team name **FCFlickBall** in the submission form. The upload files are already named `FCFlickBall.csv` and `FCFlickBall.md`.
-2. Validate the exact final CSV with the command above and verify its SHA-256.
-3. Review the new repository's staged files and history. Publish source, model and documentation only. Ensure `submission_files/`, data and caches are not tracked.
-4. Submit one team response with the registered name, CSV, public repository URL and Markdown technical document. Markdown is explicitly accepted by the submission instructions.
-5. Retain the submission confirmation and final code version. The documented deadline is November 17, 2026; use the organisers' communications for its exact time and timezone.
-
-Publication and form submission are the team's responsibility. The signed registration terms remain applicable. The package has been checked against the supplied rules and latest clarification; it is not organiser certification or a private evaluation score.

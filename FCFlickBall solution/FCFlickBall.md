@@ -86,4 +86,4 @@ The bundled model eliminates any need to retrain or download external data to re
 abda45972282c7d39a2e73d46ad4764c263b098701389e83ec0656d5c89e92c3
 ```
 
-`README.md` provides installation, tests, optional external training and publication instructions. `reports/package_verification.json` records packaging checks. The final CSV is uploaded privately to the organisers; source, frozen model and this document belong in the public repository. The format validator and file hash establish structural validity and reproduction, not competitive accuracy or organiser approval.
+`README.md` provides installation, tests and external training reproduction instructions. The final CSV is uploaded privately to the organisers; source, frozen model and this document belong in the public repository. The format validator and file hash establish structural validity and reproduction, not competitive accuracy or organiser approval.

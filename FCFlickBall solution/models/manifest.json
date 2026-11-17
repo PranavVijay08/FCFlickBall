@@ -26,5 +26,5 @@
     "possession/ml_model.py": "a7fc637c016fcdbd3695c0ab97588625c23a5fcd477f318f827a77b2a373ab82",
     "possession/__init__.py": "d344f45aef08c2a6bbd61ae4241eee4776734370d5bb227a2ae27ea350128e4e"
   },
-  "packaging_note": "Frozen model bytes, feature extraction, sequence decoding and external training code are unchanged. Unused fallback code was omitted; identical tracking-slot and provenance helpers were relocated. training_source_sha256 records unchanged files from the original training snapshot; reports/package_verification.json records the packaged source and reproduction checks."
+  "packaging_note": "Frozen model bytes, feature extraction, sequence decoding and external training code are unchanged. Unused fallback code was omitted; identical tracking-slot and provenance helpers were relocated. training_source_sha256 records unchanged files from the original training snapshot."
 }
